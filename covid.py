@@ -11,9 +11,9 @@ class country():
         self.infect = infect
         self.immune = immune
 
-# 87k current cases, 87k recoveries, 6k deaths worldwide
+# 96k current cases, 80k recoveries, 7k deaths worldwide
 # assume the dead are immune
-infect = 87
+infect = 96
 recovd = 87
 populn = 7800000
 # per day multiplication of cases
