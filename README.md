@@ -2,7 +2,7 @@
 simulates the spread of covid-19
 
 ## covid.c
-covid.c is used for regression on real data. it can be compiled with `gcc -o covid covid.c` and run with `./covid`
+covid.c is used for regression on real data. it can be compiled with `gcc -o covid covid.c -lm` and run with `./covid`
 
 for the purpose of simulating, covid.c is functionally identical to covid.py. 
 

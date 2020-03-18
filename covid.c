@@ -54,8 +54,8 @@ result regression() {
     strcpy(world.country, "world");
     // regression initial conditions for start
     int populn = 7800000; // world pop.
-    float factor = 1.166754; // init growth factor
-    float days = 18.085819; // init infectious period
+    float factor = 1.189060; // init growth factor
+    float days = 14.451526; // init infectious period
     int infect = 1; // init infections
     int recovd = 0; // init recoveries
     int length = 47; // length of each simulation in days
@@ -89,7 +89,7 @@ result regression() {
         if(world.infect <= infend-margin || world.infect >= infend+margin) {
             factor += step*infdiffer;
         }
-        if(world.immune >= immend+margin || world.immune <= immune-margin) {
+        if(world.immune >= immend+margin || world.immune <= immend-margin) {
             days += step*immdiffer;
         }
         // break if parameters all within margin
@@ -117,8 +117,8 @@ int main() {
     int recovd = 68;
     int populn = 7800000;
     float factor = 1.15;
-    int days = DAYS;
-    int length = 14;
+    int days = 14;
+    int length = DAYS;
 
     struct country world;
     strcpy(world.country, "world");
