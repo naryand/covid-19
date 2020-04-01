@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#define DAYS 14
+#define DAYS 66
 
 // C implementation of covid.py, used for regression on to data points to get parameters
 // Mostly because this is faster than the python implementation
@@ -43,7 +43,7 @@ void recover(float factor, country *world, float days, int *arr) {
     float recovered;
     int rdays = (int) nearbyintf(days);
     if(arr[rdays-1] == -1) {
-        recovered = world->infect/(pow(factor, rdays));
+        recovered = world->infect/(pow(factor, days));
     } else {
         recovered = arr[rdays-1];
     }
@@ -66,8 +66,8 @@ typedef struct result {
 } result;
 
 result regression() {
-    float initfactor = 1.3;
-    float initdays = 5;
+    float initfactor = 1.10999;
+    float initdays = 43;
     struct country world;
     strcpy(world.country, "world");
     // regression initial conditions for start
@@ -83,7 +83,7 @@ result regression() {
     float immend = 224;
 
     // margin between result and target
-    float margin = 100;
+    float margin = 5;
     // step of parameters after each loop
     float step = 0.000001;
 
@@ -134,37 +134,37 @@ result regression() {
 
 
 int main() {
-    // do the regression
-    result ret;
-    ret = regression();
-    printf("factor %.6f days %.6f\n", ret.factor, ret.days);
+    // // do the regression
+    // result ret;
+    // ret = regression();
+    // printf("factor %.6f days %.6f\n", ret.factor, ret.days);
 
-    // // mostly same as in covid.py
-    // int infect = 85;
-    // int recovd = 90;
-    // int populn = 7800000;
-    // float factor = 1.189060;
-    // int days = 14.451526;
-    // int length = DAYS;
-    // int rdays = (int) nearbyintf(days);
-    // fortnight = malloc(sizeof(int)*rdays);
-    // for(int i = 0; i < rdays; i++) {
-    //     fortnight[i] = -1;
-    // } 
+    // mostly same as in covid.py
+    int infect = 2;
+    int recovd = 0;
+    int populn = 7800000;
+    float factor = 1.1103;
+    float days = 42.5;
+    int length = DAYS;
+    int rdays = (int) nearbyintf(days);
+    fortnight = malloc(sizeof(int)*rdays);
+    for(int i = 0; i < rdays; i++) {
+        fortnight[i] = -1;
+    } 
 
-    // country world;
-    // strcpy(world.country, "world");
-    // world.suscept = (float) populn-infect-recovd;
-    // world.infect =  (float) infect;
-    // world.immune = (float) recovd;
+    country world;
+    strcpy(world.country, "world");
+    world.suscept = (float) populn-infect-recovd;
+    world.infect =  (float) infect;
+    world.immune = (float) recovd;
 
-    // int aggr[DAYS]; // DAYS defined up top
-    // for(int i = 1; i < length+1; i++) {
-    //     spread(factor, &world, days, fortnight);
-    //     recover(factor, &world, days, fortnight);
-    //     aggr[i] = world.infect+world.immune;
-    //     printf("Day: %d Susceptible: %.3f Infected: %.3f Immune: %.4f Cumulative: %.3f\n", i, world.suscept, world.infect, world.immune, world.infect+world.immune);
-    // }
-    // free(fortnight);
+    int aggr[DAYS]; // DAYS defined up top
+    for(int i = 1; i < length+1; i++) {
+        spread(factor, &world, days, fortnight);
+        recover(factor, &world, days, fortnight);
+        aggr[i] = world.infect+world.immune;
+        printf("Day: %d Susceptible: %.3f Infected: %.3f Immune: %.4f Cumulative: %.3f\n", i, world.suscept, world.infect, world.immune, world.infect+world.immune);
+    }
+    free(fortnight);
     return 0;
 }

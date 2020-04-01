@@ -1,5 +1,6 @@
 # list of countries, country has object containing, name, susceptible pop., infected pop., immune pop.
 # simulate spread (travel btwn countries?)
+import math
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 
@@ -17,9 +18,9 @@ infect = 2
 recovd = 0
 populn = 7800000
 # per day multiplication of cases
-factor = 1.085495
+factor = 1.10999
 # infection period in days
-days = 67.290779
+days = 43
 # simulation length in days
 length = 66
 
@@ -53,7 +54,7 @@ def recover(factor, country, days, list):
     
     # number of recoveries
     if list[round(days)-1] == -1:
-        recovered = country.infect/(factor**round(days)) # approximation of cases that were in progress days ago # subtract recovered from infected
+        recovered = country.infect/(math.pow(factor, days)) # approximation of cases that were in progress days ago # subtract recovered from infected
     else: 
         recovered = list[round(days)-1]
     
