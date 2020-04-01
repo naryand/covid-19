@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#define DAYS 365
+#define DAYS 15
 
 // C implementation of covid.py, used for regression on to data points to get parameters
 // Mostly because this is why faster than the python implementation
@@ -107,17 +107,17 @@ result regression() {
 
 
 int main() {
-    // do the regression
-    result ret;
-    ret = regression();
-    printf("factor %.6f days %.6f\n", ret.factor, ret.days);
+    // // do the regression
+    // result ret;
+    // ret = regression();
+    // printf("factor %.6f days %.6f\n", ret.factor, ret.days);
 
     // mostly same as in covid.py
-    int infect = 46;
-    int recovd = 68;
+    int infect = 96;
+    int recovd = 86;
     int populn = 7800000;
-    float factor = 1.15;
-    int days = 14;
+    float factor = 1.1686;
+    float days = 22.62;
     int length = DAYS;
 
     struct country world;
@@ -131,7 +131,7 @@ int main() {
         spread(factor, &world);
         recover(factor, &world, days);
         aggr[i] = world.infect+world.immune;
-        //printf("Day: %d Susceptible: %.3f Infected: %.3f Immune: %.4f Cumulative: %.3f\n", i, world.suscept, world.infect, world.immune, world.infect+world.immune);
+        printf("Day: %d Susceptible: %.3f Infected: %.3f Immune: %.4f Cumulative: %.3f\n", i, world.suscept, world.infect, world.immune, world.infect+world.immune);
     }
     return 0;
 }
