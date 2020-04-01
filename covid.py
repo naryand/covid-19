@@ -11,61 +11,71 @@ class country():
         self.infect = infect
         self.immune = immune
 
-# 96k current cases, 80k recoveries, 7k deaths worldwide
+# 85k current cases, 83.5k recoveries, 6.5k deaths countrywide as of march 15
 # assume the dead are immune
-infect = 96
-recovd = 87
+infect = 2
+recovd = 0
 populn = 7800000
 # per day multiplication of cases
-factor = 1.189060
+factor = 1.085495
 # infection period in days
-days = 14.451526
+days = 67.290779
 # simulation length in days
-length = 10
+length = 66
 
-# initialize world
+# initialize country
 world = country("world", populn-infect-recovd, infect, recovd)
 
-def spread(factor, country):
-    if world.suscept == 0 or world.infect == 0: # none left to infect or eradicated
+fortnight = [-1] * round(days)
+
+def spread(factor, country, days, list):
+    if country.suscept == 0 or country.infect == 0: # none left to infect or eradicated
         return
     
     # number of new cases with logistic growth
-    infected = (factor-1)*world.infect*(1-((world.infect+world.immune)/world.suscept))
-    world.suscept -= infected # subtract new cases from suscept
+    infected = (factor-1)*country.infect*(1-((country.infect+country.immune)/country.suscept))
+    country.suscept -= infected # subtract new cases from suscept
 
-    if world.suscept < 0: # prevent suscept from going negative
-        world.infect += world.suscept
-        world.suscept = 0
+    if country.suscept < 0: # prevent suscept from going negative
+        country.infect += country.suscept
+        country.suscept = 0
         return
     
-    world.infect += infected # add new cases to infected
+    country.infect += infected # add new cases to infected
 
-def recover(factor, country, days):
-    if world.infect == 0: # if eradicated
+    for i in range(1, round(days)):
+        list[round(days)-i] = list[round(days)-i-1]
+        list[0] = country.infect
+
+def recover(factor, country, days, list):
+    if country.infect == 0: # if eradicated
         return
     
     # number of recoveries
-    recovered = world.infect/(factor**days) # approximation of cases that were in progress days ago
-    world.infect -= recovered # subtract recovered from infected
+    if list[round(days)-1] == -1:
+        recovered = country.infect/(factor**round(days)) # approximation of cases that were in progress days ago # subtract recovered from infected
+    else: 
+        recovered = list[round(days)-1]
+    
+    country.infect -= recovered
 
-    if world.infect < 0: # prevent infect from going negative
-        world.immune += world.infect
-        world.infect = 0
+    if country.infect < 0: # prevent infect from going negative
+        country.immune += country.infect
+        country.infect = 0
         return
 
-    world.immune += recovered # add recovered to immune
+    country.immune += recovered # add recovered to immune
 
 # aggregate infections list
 aggrlist = [None] * (length)
 
 # simulate over the length
 for i in range(1, length+1):
-    spread(factor, world)
-    recover(factor, world, days)
+    spread(factor, world, days, fortnight)
+    recover(factor, world, days, fortnight)
     aggrlist[i-1] = world.infect+world.immune # add cumulative to list
     # print simulation results by day
-    #print("Day: {:d} Susceptible: {:.3f} Infected: {:.3f} Immune: {:.3f} Cumulative: {:.3f} ".format(i, world.suscept, world.infect, world.immune, world.infect+world.immune))
+    print("Day: {:d} Susceptible: {:.3f} Infected: {:.3f} Immune: {:.3f} Cumulative: {:.3f} ".format(i, world.suscept, world.infect, world.immune, world.infect+world.immune))
 
 # plot simulation results
 #plt.yticks(ticks=range(0,1000000,100000))
