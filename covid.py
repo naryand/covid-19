@@ -14,14 +14,14 @@ class country():
 # 96k current cases, 80k recoveries, 7k deaths worldwide
 # assume the dead are immune
 infect = 96
-recovd = 87
+recovd = 86
 populn = 7800000
 # per day multiplication of cases
-factor = 1.189060
+factor = 1.169
 # infection period in days
-days = 14.451526
+days = 22.4
 # simulation length in days
-length = 10
+length = 15
 
 # initialize world
 world = country("world", populn-infect-recovd, infect, recovd)
@@ -65,7 +65,7 @@ for i in range(1, length+1):
     recover(factor, world, days)
     aggrlist[i-1] = world.infect+world.immune # add cumulative to list
     # print simulation results by day
-    #print("Day: {:d} Susceptible: {:.3f} Infected: {:.3f} Immune: {:.3f} Cumulative: {:.3f} ".format(i, world.suscept, world.infect, world.immune, world.infect+world.immune))
+    print("Day: {:d} Susceptible: {:.3f} Infected: {:.3f} Immune: {:.3f} Cumulative: {:.3f} ".format(i, world.suscept, world.infect, world.immune, world.infect+world.immune))
 
 # plot simulation results
 #plt.yticks(ticks=range(0,1000000,100000))
